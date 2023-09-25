@@ -1,0 +1,193 @@
+// Initialize data structures
+// 2D array to store the distance between each node
+distanceMatrix = [
+    {0, 18, 25, 12, 8},
+    {18, 0, 15, 8, 2},
+    {25, 15, 0, 1, 28},
+    {12, 8, 5, 0, 12},
+    {8, 2, 28, 12, 0}
+  ]
+  //A list of dictionaries to store the customer deails and the  orderd products
+  Orders = [
+      {customerName:Sachith , customerAddress: 1, customerPhone: 0771234567, orderDetails: {item: "RedLipstick", quantity: 2, price: 100}},
+      {customerName:nimashi,customerAddress: 2, customerPhone: 0771234567, orderDetails: {item: "EyeLash", quantity: 2, price: 100}},
+      {customerName:chamodi,customerAddress: 3, customerPhone: 0771234567, orderDetails: {item: "NailPolish", quantity: 2, price: 100}},
+      {customerName:chamodi,customerAddress: 4, customerPhone: 0771234567, orderDetails: {item: "Foundation", quantity: 2, price: 100}},
+  ]
+  //validate the cutomer number 
+  function isValidPhoneNumber(customerNumber):
+      // Remove any non-digit characters and check if the length is exactly 10 digits
+      If the length of the customerNumber is  10:
+          Return True
+      Else:
+          thow exception "Invalid phone number format. Phone number must have exactly 10 digits."
+  //check for negative distance in the distance matrix
+  For   distance in the distanceMatrix:
+      If the distance < 0:
+          throw exception "Negative distance found"
+      
+  //check if there is a value 0 in two different point of the distance matrix
+  For   distance in the distanceMatrix:
+      If the distance == 0:
+          throw exception "Distance between two points cannot be 0"
+  
+  //check if the ustomer address is either negative or greater than or equal to the length of the distance matrix and throw an exception if such an invalid address is found "
+  For   order in Orders:
+      If the order.customerAddress < 0 or order.customerAddress >= distanceMatrix.length:
+          throw exception "Invalid customer address"
+          
+          
+  // Function to find the shortest path using Dijkstra's algorithm with a greedy method
+  function shortest_path(distanceMatrix, startPoint):
+      // Initialize an array "visited" to keep track of visited nodes (initialized to False for all nodes)
+      Initialize an array "visited" with False for all nodes
+      // Initialize an array "path" and add the start node to it
+      Initialize an array "path" and add "startPoint" to it
+      //in the visited array, set the visited node "startPoint" to True
+      Set "startPoint" to True
+  
+      //Now all the nodes in the path are not visited
+      While there are unvisited nodes:
+      //finding the current node
+          Find the last node "currentNode" in the "path"
+          Initialize "nextNode" to -1
+          Initialize "minDistance" to infinity
+  
+          //finding the next node ro visit and the smallest distance form the current node
+          For each neighbors in distanceMatrix[currentNode]:
+              If the neighbor is unvisited and the distance is less than "minDistance":
+                  Set "nextNode" to the neighbor
+                  Set "minDistance" to the distanceMatrix[currentNode][neighbor]
+                  Add "nextNode" to "path"
+                  Set "nextNode" to visited
+  
+                  if the nextNode == -1:
+                      break
+                  //if the nextnode found add it to the path and mark it as visited
+                  else Add "nextNode" to "path"
+                      Set "nextNode" to visited
+                      
+                  //No more paths to explore
+                  if "nextNode" == -1: & path.size() == 1
+                      break    
+                      
+      Print the shortest path 
+      Retun "path" 
+  
+      // To get the  routes according to the loading order  
+      Reverse the "path"
+      Print the Reversed path
+      return the reversed path
+  
+  //Using a stack, load the items onto the van 
+  //the orders are loaded in reverse delivery path order
+  Function loadOrder(Orders, reversedPath):
+   //Initialize a empty tack to load the orders
+      Initialize an empty stack "loadingStack" to store the orders
+  
+  
+      for each "node" in the "reversedPath":
+      //Getting the order to the node that is currently visiting
+          Get the order associated with the current "node" using the "orders" List of dictionary
+          If goods are found:
+              Push the goods onto "loadingStack"
+  
+      Print the loadingStack
+      Return "loadingStack", which represents the order of goods loading on the van
+  
+  
+  // Function to generate invoices for each customer
+  //The function will generate the invoice for each customer according to the delivery path
+  Function generateInvoice(Orders,reversedPath):
+      Initialize an empty array "invoices" to store the invoices
+  
+      for each node in reversedPath:
+          Initialize an empty invoice for the customer
+          Set the customer details in the invoice
+  
+          for each order in Orders:
+          //finding the custimer address that maches the current node
+              If the customer's address matches the current "node":
+                  for each item in order's orderDetails:
+                      Add the item to the invoice along with the quantity and price (if applicable)
+  
+          Add the invoice to the "invoices" list
+  
+          print the invoices
+          return the invoices
+//Function to store the coordinates of the nodes , distance and invoice ID in the backup file
+Function generateFile(invoices):
+    // Create an empty list to store the file data
+    file = []
+
+    // Reverse the list of invoices
+    reversedInvoices = reverse(invoices)
+
+    // Initialize the previousLocationIndex to 0 (starting point)
+    previousLocationIndex = 0
+
+    // Iterate through each invoice in reversedInvoices
+    for invoice in reversedInvoices:
+        // Create a new empty fileInvoice to store file data
+        Create a new empty fileInvoice
+
+        // Copy InvoiceID from the invoice to fileInvoice
+        fileInvoice["InvoiceID"] = invoice["InvoiceID"]
+
+        // Calculate the distance from the previous location to the current CustomerAddress
+        distance = distanceMatrix[previousLocationIndex][invoice["CustomerAddress"]]
+        
+        // Add the calculated distance to fileInvoice
+        fileInvoice["Distance"] = distance
+
+        // Calculate coordinates as an array [previousLocationIndex, CustomerAddress]
+        coordinates = [previousLocationIndex, invoice["CustomerAddress"]]
+        
+        // Convert coordinates to a string "[x][y]" and add to fileInvoice
+        coordinatesString = "[" + coordinates[0] + "][" + coordinates[1] + "]"
+        fileInvoice["Coordinates"] = coordinatesString
+
+        // Update previousLocationIndex with the current CustomerAddress
+        previousLocationIndex = invoice["CustomerAddress"]
+
+        // Add fileInvoice to the file list
+        file.append(fileInvoice)
+
+    // Return the list of file data
+    return file
+
+// Function to serialize the file data and write to a file    
+Function serializeAndSavefile(data,filename):
+    // Serialize the data
+    serializedData = serialize(data)
+
+    // Write the serialized data to the file
+    writeToFile(filename, serializedData)
+
+
+//function to deserialize the file data and read from the file
+Function deserializeFromFile(filename):
+    // Read the serialized data from the file
+    serializedData = readFromFile(filename)
+
+    // Deserialize the data
+    data = deserialize(serializedData)
+
+    // Return the deserialized data
+    return data
+
+// Function to print the file data
+Function printFileData(data):
+    // Iterate through each invoice in data
+    for invoice in data:
+        // Print the invoice ID
+        print(invoice["InvoiceID"])
+
+        // Print the distance
+        print(invoice["Distance"])
+
+        // Print the coordinates
+        print(invoice["Coordinates"])
+
+        
+  
