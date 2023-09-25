@@ -138,31 +138,5 @@ Function generateInvoice(Orders,reversedPath):
 
 
 
-// // Using a stack, load the items onto the van in reverse delivery path order
-// function loadOrder(goodsAssociation, reversedPath):
-//     Initialize an empty stack "order" to store the orders
-
-//     for each "node" in the "reversedPath":
-//         Get the goods associated with the current "node" using the "goodAssociation" dictionary
-//         If goods are found:
-//            Push the goods onto "order"
-
-//     Return "order", which represents the order of goods loading on the van
-
-// // Function to generate invoices
-// function generateInvoice(loadOrder, customerDetails):
-//     Initialize an empty list "invoices" to store the invoices
-
-//     for each customer in customerDetails:
-//         Initialize an empty invoice for the customer
-//         Set the customer details in the invoice
-
-//         for each item in loadOrder:
-//             If the goods belong to the current customer:
-//                 Add the goods to the invoice along with the quantity and price (if applicable)
-
-//         Add the invoice to the "invoices" list
-
-//     Return the list of "invoices"
 
     
